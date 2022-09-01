@@ -11,12 +11,6 @@ import (
 
 var ead = dao.EmployeeDAO{}
 
-func apiResponse(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"message":"hello world!"}`))
-}
-
 func CreateNewEmployee(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
@@ -124,7 +118,6 @@ func init() {
 }
 
 func main() {
-	http.HandleFunc("/", apiResponse)
 	http.HandleFunc("/employee/", getEmployeesById)
 	http.HandleFunc("/add-employee", CreateNewEmployee)
 	http.HandleFunc("/delete-employee", deleteEmployeeById)
