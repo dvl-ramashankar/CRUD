@@ -1,3 +1,3 @@
 # CRUD
 
-Crud operation in Go Lang with APi's without using framework.
+Crud operation in Go Lang (APi's without using framework).
