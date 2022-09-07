@@ -1,11 +1,10 @@
-package dao
+package service
 
 import (
 	"context"
+	"employee/model"
 	"errors"
 	"log"
-
-	"employee-management/model"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -41,7 +40,7 @@ func (e *EmployeeDAO) Insert(employee model.Employee) error {
 	_, err := Collection.InsertOne(ctx, employee)
 
 	if err != nil {
-		return errors.New("unable to create new record")
+		return errors.New("Unable To Insert New Record")
 	}
 
 	return nil
@@ -53,7 +52,7 @@ func (e *EmployeeDAO) FindByEmpId(empId string) ([]*model.Employee, error) {
 	cur, err := Collection.Find(ctx, bson.D{primitive.E{Key: "employee_id", Value: empId}})
 
 	if err != nil {
-		return employees, errors.New("unable to query db")
+		return employees, errors.New("Unable TO Apply Query")
 	}
 
 	for cur.Next(ctx) {
@@ -90,7 +89,7 @@ func (e *EmployeeDAO) DeleteEmployee(empId string) error {
 	}
 
 	if res.DeletedCount == 0 {
-		return errors.New("no employees were deleted")
+		return errors.New("Unable To Delete Employee")
 	}
 
 	return nil

@@ -1,15 +1,16 @@
 package main
 
 import (
-	"employee-management/dao"
-	"employee-management/model"
+	"employee/model"
+	"employee/service"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
 )
 
-var ead = dao.EmployeeDAO{}
+var ead = service.EmployeeDAO{}
 
 func CreateNewEmployee(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
@@ -28,7 +29,7 @@ func CreateNewEmployee(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusBadRequest, "Invalid request")
 	} else {
 		respondWithJson(w, http.StatusAccepted, map[string]string{
-			"message": "Record inserted successfully",
+			"message": "Record Inserted Successfully",
 		})
 	}
 }
@@ -38,6 +39,7 @@ func getEmployeesById(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "GET" {
 		respondWithError(w, http.StatusBadRequest, "Method not allowed")
+		return
 	}
 
 	empId := strings.Split(r.URL.Path, "/")[2]
@@ -46,6 +48,7 @@ func getEmployeesById(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
 	}
 
 	respondWithJson(w, http.StatusOK, employees)
@@ -94,7 +97,7 @@ func updateEmployeeById(w http.ResponseWriter, r *http.Request) {
 	_ = ead.UpdateEmployee(empId, emp)
 
 	respondWithJson(w, http.StatusOK, map[string]string{
-		"message": "Record updated successfully",
+		"message": "Record Updated Successfully",
 	})
 }
 
@@ -110,7 +113,7 @@ func respondWithError(w http.ResponseWriter, code int, msg string) {
 }
 
 func init() {
-	ead.Server = "mongodb://localhost:27017/"
+	ead.Server = "mongodb+srv://ramashankar:<XXXXXXXX>@cluster0.qstjmc9.mongodb.net/?retryWrites=true&w=majority"
 	ead.Database = "EmployeeDB"
 	ead.Collection = "Employee"
 
@@ -122,6 +125,6 @@ func main() {
 	http.HandleFunc("/add-employee", CreateNewEmployee)
 	http.HandleFunc("/delete-employee", deleteEmployeeById)
 	http.HandleFunc("/update-employee", updateEmployeeById)
-
+	fmt.Println("Excecuted Main Method")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
